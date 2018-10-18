@@ -53,6 +53,11 @@ public class NetworkManagerExample {
                 } else {
                     Properties ipv4Config = dbusConn.getRemoteObject("org.freedesktop.NetworkManager", ipv4Path.toString(), Properties.class);
 
+                    Map<String,Variant<?>> allIpV4 = ipv4Config.GetAll("org.freedesktop.NetworkManager.IP4Config");
+                    for (String key : allIpV4.keySet()) {
+                       System.out.println("key: " + key);
+                    }
+
                     List<Map<String, Variant<?>>> addressArrV4 = ipv4Config.Get("org.freedesktop.NetworkManager.IP4Config", "AddressData");
 
                     // addressArr contains all IPs of the interface and additional properties (if any)
