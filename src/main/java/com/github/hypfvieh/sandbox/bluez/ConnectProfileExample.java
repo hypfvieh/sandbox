@@ -1,4 +1,4 @@
-package com.github.hypfvieh.sandbox.dbus;
+package com.github.hypfvieh.sandbox.bluez;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
