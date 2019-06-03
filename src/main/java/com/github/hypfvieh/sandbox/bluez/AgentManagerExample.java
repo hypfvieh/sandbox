@@ -11,7 +11,7 @@ public class AgentManagerExample {
     
     public static void main(String[] args) throws Exception {
         try (DBusConnection connection = DBusConnection.newConnection(DBusBusType.SYSTEM)) {
-            System.out.println("Gathering AgentManager1");
+            System.out.println("Retrieving AgentManager1");
             AgentManager1 agentManager1 = connection.getRemoteObject("org.bluez", "/org/bluez", AgentManager1.class);
             System.out.println("Creating Agent1");
             Agent1Impl btAgent = new Agent1Impl();
