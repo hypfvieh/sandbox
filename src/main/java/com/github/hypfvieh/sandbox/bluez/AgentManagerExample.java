@@ -1,6 +1,7 @@
 package com.github.hypfvieh.sandbox.bluez;
 
 import org.bluez.AgentManager1;
+import org.bluez.Device1;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
@@ -17,7 +18,23 @@ public class AgentManagerExample {
             Agent1Impl btAgent = new Agent1Impl();
             
             System.out.println("Registering Agent1 on AgentManager1");
-            agentManager1.RegisterAgent(new DBusPath(btAgent.getObjectPath()), "NoInputNoOutput");
+            agentManager1.RegisterAgent(new DBusPath(btAgent.getObjectPath()), "KeyboardOnly");
+            
+            System.out.println("Registering Agent1 as default agent");
+            agentManager1.RequestDefaultAgent(new DBusPath(btAgent.getObjectPath()));
+
+            System.out.println("Exporting Agent1 to Dbus");
+            connection.exportObject("/", btAgent);
+        
+            // Replace MAC address with the MAC of your bluetooth device 
+            String deviceMac = "dev_AA:BB:CC:DD:EE:FF".replace(":", "_");
+            
+            Device1 device = connection.getRemoteObject("org.bluez", "/org/bluez/hci0/" + deviceMac, Device1.class);
+            if (device != null) {
+                device.Connect();
+                System.out.println("Connected!");
+            }
+            
             System.out.println("All Done");
         }
     }
