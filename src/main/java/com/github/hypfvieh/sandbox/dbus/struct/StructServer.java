@@ -63,28 +63,16 @@ public class StructServer implements IStructServer {
 
     @Override
     public void setStructFromVariant(Variant<?> _variant) {
-        if (_variant.getType() instanceof DBusStructType) {
-            if (_variant.getValue() instanceof Object[]) {
-                Class<?>[] argTypes = Arrays.stream((Object[]) _variant.getValue()).map(a -> a.getClass()).toArray(new IntFunction<Class<?>[]>() {
-                    @Override
-                    public Class<?>[] apply(int size) {
-                        return new Class<?>[size];
-                    }
-                });
+        try {
+            SampleStruct newInstance = StructHelper.createStruct(argTypes, _variant.getValue(), SampleStruct.class);
 
-                try {
-                    SampleStruct newInstance = StructHelper.createStruct(argTypes, _variant.getValue(), SampleStruct.class);
+            System.out.println("The variant struct says: " + newInstance.getAnInt() + " is " + newInstance.getaString());
+            method2Done = true;
 
-                    System.out.println("The variant struct says: " + newInstance.getAnInt() + " is " + newInstance.getaString());
-                    method2Done = true;
-
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException | NoSuchMethodException | SecurityException _ex) {
-                    // TODO Auto-generated catch block
-                    _ex.printStackTrace();
-                }
-
-            }
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException | SecurityException _ex) {
+            // TODO Auto-generated catch block
+            _ex.printStackTrace();
         }
     }
 
