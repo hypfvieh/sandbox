@@ -14,7 +14,17 @@
     </properties>
 
 	<build>
-	</build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.8.1</version>
+			<configuration>
+				<release>11</release>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
 
     <dependencies>
          <dependency>
@@ -40,6 +50,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
 
