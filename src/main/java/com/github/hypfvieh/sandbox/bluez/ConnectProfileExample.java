@@ -1,6 +1,5 @@
 package com.github.hypfvieh.sandbox.bluez;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,15 +55,17 @@ public class ConnectProfileExample {
             System.err.println("Release called");
         }
 
-        @Override
-        public void NewConnection(DBusPath _device, FileDescriptor _fd, Map<String, Variant<?>> _fd_properties)
-                throws BluezRejectedException, BluezCanceledException {
-            System.err.println("New connection: FD=" + _fd + ", Path=" + _device + ", Props=" + _fd_properties);
-        }
+      
 
         @Override
         public void RequestDisconnection(DBusPath _device) throws BluezRejectedException, BluezCanceledException {
             System.err.println("Disconnect requested: Path=" + _device);
+        }
+
+        @Override
+        public void NewConnection(DBusPath _arg0, org.freedesktop.dbus.FileDescriptor _arg1,
+                Map<String, Variant<?>> _arg2) throws BluezRejectedException, BluezCanceledException {
+            System.err.println("New connection: FD=" + _arg1 + ", Path=" + _arg0+ ", Props=" + _arg2);            
         }
         
     }

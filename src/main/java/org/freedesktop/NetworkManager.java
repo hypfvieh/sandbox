@@ -87,5 +87,4 @@ public interface NetworkManager extends DBusInterface, Properties {
     public Map<CharSequence, UInt32> CheckpointRollback(DBusInterface checkpoint);
 
     public void CheckpointAdjustRollbackTimeout(DBusInterface checkpoint, UInt32 add_timeout);
-
 }

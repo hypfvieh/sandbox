@@ -63,17 +63,18 @@ public class StructServer implements IStructServer {
 
     @Override
     public void setStructFromVariant(Variant<?> _variant) {
-        try {
-            SampleStruct newInstance = StructHelper.createStruct(argTypes, _variant.getValue(), SampleStruct.class);
-
-            System.out.println("The variant struct says: " + newInstance.getAnInt() + " is " + newInstance.getaString());
-            method2Done = true;
-
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | NoSuchMethodException | SecurityException _ex) {
-            // TODO Auto-generated catch block
-            _ex.printStackTrace();
-        }
+//        try {
+//            // SampleStruct newInstance = StructHelper.createStruct(argTypes, _variant.getValue(), SampleStruct.class);
+//
+//            // System.out.println("The variant struct says: " + newInstance.getAnInt() + " is " +
+//            // newInstance.getaString());
+//            method2Done = true;
+//
+//        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+//                | InvocationTargetException | NoSuchMethodException | SecurityException _ex) {
+//            // TODO Auto-generated catch block
+//            _ex.printStackTrace();
+//        }
     }
 
 
