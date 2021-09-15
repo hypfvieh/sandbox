@@ -1,13 +1,7 @@
 package com.github.hypfvieh.sandbox.dbus.struct;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.function.IntFunction;
-
-import org.freedesktop.dbus.StructHelper;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
-import org.freedesktop.dbus.types.DBusStructType;
 import org.freedesktop.dbus.types.Variant;
 
 /**
