@@ -41,14 +41,14 @@
 
          <dependency>
              <groupId>com.github.hypfvieh</groupId>
-             <artifactId>dbus-java-transport-jnr-unixsocket</artifactId>
+             <artifactId>dbus-java-transport-native-unixsocket</artifactId>
              <version>4.0.0-SNAPSHOT</version>
          </dependency>
          
          <dependency>
              <groupId>com.github.hypfvieh</groupId>
              <artifactId>bluez-dbus</artifactId>
-             <version>0.1.4-SNAPSHOT</version>
+             <version>0.1.5-SNAPSHOT</version>
          </dependency>
 
     	<dependency>

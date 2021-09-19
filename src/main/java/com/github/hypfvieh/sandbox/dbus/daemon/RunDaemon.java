@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.freedesktop.dbus.bin.EmbeddedDBusDaemon;
 import org.freedesktop.dbus.connections.BusAddress;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
-import org.freedesktop.dbus.connections.transports.TransportFactory;
+import org.freedesktop.dbus.connections.transports.TransportBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class RunDaemon {
         log = LoggerFactory.getLogger(getClass());
         Objects.requireNonNull(_transportProtocol, "TransportProtocol required.");
 
-        newAddress = TransportFactory.createDynamicSession(_transportProtocol.name(), false);
+        newAddress = TransportBuilder.createDynamicSession(_transportProtocol.name(), false);
     }
 
     private void startDaemon() throws DBusException {
