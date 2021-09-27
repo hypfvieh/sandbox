@@ -19,7 +19,7 @@ import com.github.hypfvieh.util.SystemUtil;
 
 /**
  * Sample on how to start the {@link EmbeddedDBusDaemon} with transport protocol selection.
- * 
+ *
  * @author hypfvieh
  * @since v1.1.1 - 2021-09-15
  */
@@ -55,7 +55,7 @@ public class RunTwoPartDaemon {
 
             log.info("Starting embedded bus on address {})", listenBusAddress.getRawAddress());
             daemon = new EmbeddedDBusDaemon(listenBusAddress);
-            
+
             // run daemon in non-daemon thread so application will not quit
             new Thread(() -> {
                 daemon.startInForeground();
@@ -91,7 +91,7 @@ public class RunTwoPartDaemon {
             try  {
             	conn = DBusConnection.getConnection(busAddress.getRawAddress());
                 log.info("Connected to embedded DBus {}", busAddress.getRawAddress());
-                
+
                 conn.requestBusName(EXPORT_NAME);
                 SomeExport someExport = new SomeExport();
                 conn.exportObject("/", someExport);
@@ -118,12 +118,12 @@ public class RunTwoPartDaemon {
     public static void main(String[] _args) throws Exception {
         TransportProtocol proto = TransportProtocol.UNIX;
         if (_args.length == 1) {
-            if (_args[1].equalsIgnoreCase("TCP")) {
+            if (_args[0].equalsIgnoreCase("TCP")) {
                 proto = TransportProtocol.TCP;
-            } else if (_args[1].equalsIgnoreCase("UNIX")) {
+            } else if (_args[0].equalsIgnoreCase("UNIX")) {
                 proto = TransportProtocol.UNIX;
             } else {
-                throw new RuntimeException("Unknown transport protocol: " + _args[1]);
+                throw new RuntimeException("Unknown transport protocol: " + _args[0]);
             }
         }
         RunTwoPartDaemon runDaemon = new RunTwoPartDaemon(proto);
@@ -135,7 +135,7 @@ public class RunTwoPartDaemon {
         TCP,
         UNIX
     }
-    
+
     public static class SomeExport implements IExport {
 
 		@Override
@@ -147,9 +147,9 @@ public class RunTwoPartDaemon {
 		public String getObjectPath() {
 			return null;
 		}
-    	
+
     }
-    
+
     public interface IExport extends DBusInterface {
     	String sayHello();
     }
