@@ -13,7 +13,7 @@ import org.bluez.exceptions.BluezNotAuthorizedException;
 import org.bluez.exceptions.BluezNotReadyException;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
-import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
+import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.handlers.AbstractInterfacesAddedHandler;
 import org.freedesktop.dbus.handlers.AbstractInterfacesRemovedHandler;
@@ -36,7 +36,7 @@ public class SimpleBluez implements DBusInterface, ObjectManager {
 
     public SimpleBluez() throws DBusException {
         // open connection to bluez on SYSTEM Bus
-        connection = DBusConnection.getConnection(DBusBusType.SYSTEM);
+        connection = DBusConnectionBuilder.forSystemBus().build();
         // create profile to export
         profile = new GattProfile1Impl("/com/github/hypfvieh/bluez/MySampleProfile");
     }

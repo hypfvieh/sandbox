@@ -17,7 +17,7 @@
     <logger name="org.freedesktop.dbus.MessageWriter" level="INFO" />
 
     <!-- root logger -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="app_stdout" />
     </root>
 

@@ -29,20 +29,20 @@
     <dependencies>
          <dependency>
              <groupId>com.github.hypfvieh</groupId>
-             <artifactId>dbus-java</artifactId>
-             <version>4.0.0</version>
+             <artifactId>dbus-java-core</artifactId>
+             <version>4.1.1-SNAPSHOT</version>
          </dependency>
          
          <dependency>
              <groupId>com.github.hypfvieh</groupId>
              <artifactId>dbus-java-transport-tcp</artifactId>
-             <version>4.0.0</version>
+             <version>4.1.1-SNAPSHOT</version>
          </dependency>
 
          <dependency>
              <groupId>com.github.hypfvieh</groupId>
              <artifactId>dbus-java-transport-native-unixsocket</artifactId>
-             <version>4.0.0</version>
+             <version>4.1.1-SNAPSHOT</version>
          </dependency>
          
          <dependency>
@@ -67,14 +67,14 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.2.1</version>
+            <version>2.13.4</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12</version>
+            <version>3.12.0</version>
         </dependency>
         
         <dependency>
