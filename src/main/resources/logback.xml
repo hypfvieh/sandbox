@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: %=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-% $ -->
-
 <configuration debug="false" scan="true" scanPeriod="30 seconds">
 
      <appender name="app_stdout" class="ch.qos.logback.core.ConsoleAppender">
@@ -15,6 +13,9 @@
 
 
     <logger name="org.freedesktop.dbus.MessageWriter" level="INFO" />
+    <logger name="net.schmizz.sshj.common.KeyType" level="INFO" />
+    <logger name="net.schmizz.sshj.common.ECDSAVariationsAdapter" level="INFO" />
+    <logger name="net.schmizz.sshj.transport.random.JCERandom" level="INFO" />
 
     <!-- root logger -->
     <root level="DEBUG">

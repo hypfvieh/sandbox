@@ -37,12 +37,6 @@
 
 		<dependency>
 			<groupId>com.github.hypfvieh</groupId>
-			<artifactId>dbus-java-transport-tcp</artifactId>
-			<version>5.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.hypfvieh</groupId>
 			<artifactId>dbus-java-transport-native-unixsocket</artifactId>
 			<version>5.0.1-SNAPSHOT</version>
 		</dependency>
@@ -58,6 +52,13 @@
 			<artifactId>java-utils</artifactId>
 			<version>1.2.0</version>
 		</dependency>
+
+        <!-- For SSH Tunneling-->
+        <dependency>
+            <groupId>com.hierynomus</groupId>
+            <artifactId>sshj</artifactId>
+            <version>0.38.0</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
