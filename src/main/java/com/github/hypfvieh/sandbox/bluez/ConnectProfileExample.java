@@ -1,9 +1,5 @@
 package com.github.hypfvieh.sandbox.bluez;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bluez.Device1;
 import org.bluez.Profile1;
 import org.bluez.ProfileManager1;
@@ -11,31 +7,35 @@ import org.bluez.exceptions.BluezCanceledException;
 import org.bluez.exceptions.BluezRejectedException;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
-import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
+import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.types.Variant;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConnectProfileExample {
     public static void main(String[] args) throws DBusException, InterruptedException, IOException {
         // open connection to bluez on SYSTEM Bus
-        DBusConnection connection = DBusConnection.getConnection(DBusBusType.SYSTEM);
-        ProfileImpl object = new ProfileImpl();
-        connection.exportObject("/", object);
-        
-        ProfileManager1 profileManager = connection.getRemoteObject("org.bluez", "/org/bluez", ProfileManager1.class);
-        
-        Map<String, Variant<?>> props = new HashMap<String, Variant<?>>();
-        profileManager.RegisterProfile( new DBusPath("/"), "00001101-0000-1000-8000-00805F9B34FB", props);
-        
-        Device1 device= connection.getRemoteObject("org.bluez", "/org/bluez/hci0/dev_04_4F_4C_FA_04_E7", Device1.class);
-        device.ConnectProfile("00001101-0000-1000-8000-00805F9B34FB");
-        
-        System.out.println("sleeping");
-        
-        Thread.sleep(60000L);
-        
-        System.out.println("shutting down");
-        connection.close();
+        try (DBusConnection connection = DBusConnectionBuilder.forSystemBus().build()) {
+            ProfileImpl object = new ProfileImpl();
+            connection.exportObject("/", object);
+            
+            ProfileManager1 profileManager = connection.getRemoteObject("org.bluez", "/org/bluez", ProfileManager1.class);
+            
+            Map<String, Variant<?>> props = new HashMap<String, Variant<?>>();
+            profileManager.RegisterProfile( new DBusPath("/"), "00001101-0000-1000-8000-00805F9B34FB", props);
+            
+            Device1 device= connection.getRemoteObject("org.bluez", "/org/bluez/hci0/dev_04_4F_4C_FA_04_E7", Device1.class);
+            device.ConnectProfile("00001101-0000-1000-8000-00805F9B34FB");
+            
+            System.out.println("sleeping");
+            
+            Thread.sleep(60000L);
+            
+            System.out.println("shutting down");
+        }
     }
     
     public static class ProfileImpl implements Profile1 {

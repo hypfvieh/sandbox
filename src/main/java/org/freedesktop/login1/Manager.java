@@ -1,6 +1,5 @@
 package org.freedesktop.login1;
 
-import java.util.List;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.FileDescriptor;
 import org.freedesktop.dbus.TypeRef;
@@ -11,12 +10,8 @@ import org.freedesktop.dbus.interfaces.DBusInterface;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.UInt32;
 import org.freedesktop.dbus.types.UInt64;
-import org.freedesktop.login1.CreateSessionStruct;
-import org.freedesktop.login1.ListInhibitorsStruct;
-import org.freedesktop.login1.ListSeatsStruct;
-import org.freedesktop.login1.ListSessionsStruct;
-import org.freedesktop.login1.ListUsersStruct;
-import org.freedesktop.login1.PropertyScheduledShutdownStruct;
+
+import java.util.List;
 
 /**
  * Auto-generated class.

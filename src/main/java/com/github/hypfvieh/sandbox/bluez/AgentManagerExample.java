@@ -1,17 +1,17 @@
 package com.github.hypfvieh.sandbox.bluez;
 
+import com.github.hypfvieh.sandbox.bluez.impl.Agent1Impl;
+
 import org.bluez.AgentManager1;
 import org.bluez.Device1;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
-import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
-
-import com.github.hypfvieh.sandbox.bluez.impl.Agent1Impl;
+import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 
 public class AgentManagerExample {
 
     public static void main(String[] args) throws Exception {
-        try (DBusConnection connection = DBusConnection.newConnection(DBusBusType.SYSTEM)) {
+        try (DBusConnection connection = DBusConnectionBuilder.forSystemBus().build()) {
             System.out.println("Retrieving AgentManager1");
             AgentManager1 agentManager1 = connection.getRemoteObject("org.bluez", "/org/bluez", AgentManager1.class);
             System.out.println("Creating Agent1");

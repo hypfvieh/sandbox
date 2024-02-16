@@ -1,12 +1,12 @@
 package com.github.hypfvieh.sandbox.bluez;
 
-import java.io.IOException;
-
 import org.freedesktop.dbus.connections.impl.DBusConnection;
-import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
+import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.handlers.AbstractPropertiesChangedHandler;
 import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+
+import java.io.IOException;
 
 /**
  * Simple sample on how to register a properties changed listener.
@@ -14,16 +14,16 @@ import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
 public class PropertiesChangedExample {
     public static void main(String[] args) throws DBusException, InterruptedException, IOException {
         // open connection to bluez on SYSTEM Bus
-        DBusConnection connection = DBusConnection.getConnection(DBusBusType.SYSTEM);
+        try (DBusConnection connection = DBusConnectionBuilder.forSystemBus().build()) {
 
-        connection.addSigHandler(PropertiesChanged.class, new PropChangedHandler());
-
-        System.out.println("sleeping");
-
-        Thread.sleep(60000L);
-
-        System.out.println("shutting down");
-        connection.close();
+            connection.addSigHandler(PropertiesChanged.class, new PropChangedHandler());
+    
+            System.out.println("sleeping");
+    
+            Thread.sleep(60000L);
+    
+            System.out.println("shutting down");
+        }
     }
 
     /**
