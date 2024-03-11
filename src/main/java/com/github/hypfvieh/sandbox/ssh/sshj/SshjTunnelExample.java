@@ -1,11 +1,14 @@
-package com.github.hypfvieh.sandbox.ssh;
+package com.github.hypfvieh.sandbox.ssh.sshj;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class SshTunnelExample {
+/**
+ * Example on how to use SSHJ based SSH Tunnel.
+ */
+public class SshjTunnelExample {
     public static void main(String[] args) throws InterruptedException {
-        try (var tunnel = SshTunnelBuilder.create().withForwardTarget("localhost", 4711).withSshHost("localhost").withSshUserPassword(args[0]).build()) {
+        try (var tunnel = SshjTunnelBuilder.create().withForwardTarget("localhost", 4711).withSshHost("localhost").withSshUserPassword(args[0]).build()) {
 
             Integer port = tunnel.getLocalListenPorts().get("localhost:4711");
 
@@ -14,6 +17,8 @@ public class SshTunnelExample {
                 return;
             }
 
+            // we need a bit of time to establish the connection (due to concurrency)
+            // otherwise the tunnel will be closed before any connection is made
             Thread.sleep(1000);
 
             System.out.println("Found port: " + port);

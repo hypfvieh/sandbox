@@ -1,12 +1,13 @@
-package com.github.hypfvieh.sandbox.ssh;
+package com.github.hypfvieh.sandbox.ssh.sshj;
 
-import com.github.hypfvieh.sandbox.ssh.SshTunnelBuilder.SshForwardTarget;
-import com.github.hypfvieh.sandbox.ssh.SshTunnelBuilder.SshTunnelConfig;
+import com.github.hypfvieh.sandbox.ssh.SshForwardTarget;
+import com.github.hypfvieh.sandbox.ssh.SshTunnelConfig;
 
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.LocalPortForwarder;
 import net.schmizz.sshj.connection.channel.direct.Parameters;
 import net.schmizz.sshj.transport.TransportException;
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.userauth.UserAuthException;
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider;
 import net.schmizz.sshj.userauth.method.AbstractAuthMethod;
@@ -30,11 +31,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Represents a SSH connection with several forwarding connections.
+ * Represents a SSH connection with several forwarding connections using SSHJ.
  *
  * @author hypfvieh
  */
-public class SshTunnel implements Closeable {
+public class SshjTunnel implements Closeable {
     private static final AtomicLong TC_INSTANCE_COUNTER = new AtomicLong(1);
 
     private final Logger logger = LoggerFactory.getLogger(getClass());;
@@ -47,7 +48,7 @@ public class SshTunnel implements Closeable {
 
     private SSHClient ssh;
 
-    SshTunnel(SshTunnelConfig _config) {
+    SshjTunnel(SshTunnelConfig _config) {
         config = _config;
         tasks = new ArrayList<>();
         threadPool =  Executors.newFixedThreadPool(_config.getForwardTargets().size(), r -> {
@@ -61,11 +62,17 @@ public class SshTunnel implements Closeable {
      * Create the connection to the SSH server and start all forwarding connections.
      * @return this
      */
-    SshTunnel connect() {
+    SshjTunnel connect() {
         CountDownLatch latch = new CountDownLatch(config.getForwardTargets().size());
         try {
             ssh = new SSHClient();
-            ssh.loadKnownHosts();
+
+            if (config.isIgnoreHostKeys()) {
+                ssh.addHostKeyVerifier(new PromiscuousVerifier());
+            } else {
+                ssh.loadKnownHosts();
+            }
+
             ssh.connect(config.getSshHost(), config.getSshPort());
 
             List<AbstractAuthMethod> authMethods = configureAuthMethods();
@@ -98,13 +105,6 @@ public class SshTunnel implements Closeable {
             logger.error("Connection failed", _ex);
         }
 
-        if (config.isWaitForForwarders()) {
-            try {
-                latch.await();
-            } catch (InterruptedException _ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
         return this;
     }
 

@@ -1,19 +1,24 @@
-package com.github.hypfvieh.sandbox.ssh;
+package com.github.hypfvieh.sandbox.ssh.jsch;
+
+import com.github.hypfvieh.sandbox.ssh.SshForwardTarget;
+import com.github.hypfvieh.sandbox.ssh.SshTunnelConfig;
+import com.github.hypfvieh.sandbox.ssh.sshj.SshjTunnel;
+
+import com.jcraft.jsch.JSchException;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Builder to create a SSH tunnel connection.
+ * Builder to create a SSH tunnel connection with JSCH.
  * @author hypfvieh
  */
-public class SshTunnelBuilder {
+public class JschTunnelBuilder {
 
     private SshTunnelConfig config;
 
-    private SshTunnelBuilder() {
+    private JschTunnelBuilder() {
         config = new SshTunnelConfig();
     }
 
@@ -22,20 +27,8 @@ public class SshTunnelBuilder {
      *
      * @return new instance
      */
-    public static SshTunnelBuilder create() {
-        return new SshTunnelBuilder();
-    }
-
-    /**
-     * Whether to wait for all forwarders to be created before returning from {@link #build()} call.<br>
-     * Default: true
-     *
-     * @param _wait boolean
-     * @return this
-     */
-    public SshTunnelBuilder withWaitForForwarders(boolean _wait) {
-        config.setWaitForForwarders(_wait);
-        return this;
+    public static JschTunnelBuilder create() {
+        return new JschTunnelBuilder();
     }
 
     /**
@@ -44,7 +37,7 @@ public class SshTunnelBuilder {
      * @param _host server name or IP
      * @return this
      */
-    public SshTunnelBuilder withSshHost(String _host) {
+    public JschTunnelBuilder withSshHost(String _host) {
         config.setSshHost(_host);
         return this;
     }
@@ -56,7 +49,7 @@ public class SshTunnelBuilder {
      * @param _port port
      * @return
      */
-    public SshTunnelBuilder withSshPort(int _port) {
+    public JschTunnelBuilder withSshPort(int _port) {
         config.setSshPort(_port <= 0 || _port > 65535 ? 22 : _port);
         return this;
     }
@@ -69,7 +62,7 @@ public class SshTunnelBuilder {
      * @param _keyFile key file
      * @return this
      */
-    public SshTunnelBuilder withPrivateKeyFile(File _keyFile) {
+    public JschTunnelBuilder withPrivateKeyFile(File _keyFile) {
         config.setPrivateKeyFile(_keyFile);
         return this;
     }
@@ -80,7 +73,7 @@ public class SshTunnelBuilder {
      * @param _password password
      * @return this
      */
-    public SshTunnelBuilder withKeyFilePassword(String _password) {
+    public JschTunnelBuilder withKeyFilePassword(String _password) {
         config.setKeyFilePassword(_password);
         return this;
     }
@@ -92,7 +85,7 @@ public class SshTunnelBuilder {
      * @param _user username
      * @return this
      */
-    public SshTunnelBuilder withSshUserName(String _user) {
+    public JschTunnelBuilder withSshUserName(String _user) {
         config.setSshUserName(_user);
         return this;
     }
@@ -105,8 +98,13 @@ public class SshTunnelBuilder {
      * @param _password password
      * @return this
      */
-    public SshTunnelBuilder withSshUserPassword(String _password) {
+    public JschTunnelBuilder withSshUserPassword(String _password) {
         config.setSshUserPassword(_password);
+        return this;
+    }
+
+    public JschTunnelBuilder withIgnoreHostKey(boolean _ignoreHostKey) {
+        config.setIgnoreHostKeys(_ignoreHostKey);
         return this;
     }
 
@@ -114,7 +112,7 @@ public class SshTunnelBuilder {
      * Add a forwarding target by hostname/IP and target port.<br>
      * You can use this multiple times to add as much as you want.<br>
      * The local listen port will be determined dynamically and can be queried using<br>
-     * {@link SshTunnel#getLocalListenPorts()}.<br>
+     * {@link SshjTunnel#getLocalListenPorts()}.<br>
      * All forwarding connections added by this method will use localhost as local listening address.<br>
      * <br>
      * The map contains local ports for all forwarding connections where the key is created using:<br>
@@ -129,7 +127,7 @@ public class SshTunnelBuilder {
      *
      * @return this
      */
-    public SshTunnelBuilder withForwardTarget(String _targetHost, int _targetPort) {
+    public JschTunnelBuilder withForwardTarget(String _targetHost, int _targetPort) {
         config.getForwardTargets().add(new SshForwardTarget(_targetHost, _targetPort, "localhost", 0));
         return this;
     }
@@ -144,7 +142,7 @@ public class SshTunnelBuilder {
      *
      * @return this
      */
-    public SshTunnelBuilder withForwardTarget(String _targetHost, int _targetPort, int _localPort) {
+    public JschTunnelBuilder withForwardTarget(String _targetHost, int _targetPort, int _localPort) {
         config.getForwardTargets().add(new SshForwardTarget(_targetHost, _targetPort, "localhost", _localPort));
         return this;
     }
@@ -160,7 +158,7 @@ public class SshTunnelBuilder {
      *
      * @return this
      */
-    public SshTunnelBuilder withForwardTarget(String _targetHost, int _targetPort, String _localListenAddress, int _localPort) {
+    public JschTunnelBuilder withForwardTarget(String _targetHost, int _targetPort, String _localListenAddress, int _localPort) {
         config.getForwardTargets().add(new SshForwardTarget(_targetHost, _targetPort, _localListenAddress, _localPort));
         return this;
     }
@@ -170,8 +168,9 @@ public class SshTunnelBuilder {
      * After calling this method successfully the configuration created beforehand is resettet.
      *
      * @return tunnel
+     * @throws JSchException
      */
-    public SshTunnel build() {
+    public JschTunnel build() throws JSchException {
         if (config.getSshHost() == null || config.getSshHost().isBlank()) {
             throw new IllegalArgumentException("SSH Host is required");
         }
@@ -198,88 +197,10 @@ public class SshTunnelBuilder {
         }
 
         @SuppressWarnings("resource")
-        SshTunnel tunnel = new SshTunnel(config);
+        JschTunnel tunnel = new JschTunnel(config);
         config = new SshTunnelConfig();
 
         return tunnel.connect();
     }
 
-    static class SshTunnelConfig {
-        private String                 sshHost;
-        private int                    sshPort;
-        private File                   privateKeyFile;
-        private String                 keyFilePassword;
-        private String                 sshUserName;
-        private String                 sshUserPassword;
-        private List<SshForwardTarget> forwardTargets = new ArrayList<>();
-
-        private boolean                waitForForwarders = true;
-
-        String getSshHost() {
-            return sshHost;
-        }
-
-        void setSshHost(String _sshHost) {
-            sshHost = _sshHost;
-        }
-
-        int getSshPort() {
-            return sshPort;
-        }
-
-        void setSshPort(int _sshPort) {
-            sshPort = _sshPort;
-        }
-
-        File getPrivateKeyFile() {
-            return privateKeyFile;
-        }
-
-        void setPrivateKeyFile(File _privateKeyFile) {
-            privateKeyFile = _privateKeyFile;
-        }
-
-        String getKeyFilePassword() {
-            return keyFilePassword;
-        }
-
-        void setKeyFilePassword(String _keyFilePassword) {
-            keyFilePassword = _keyFilePassword;
-        }
-
-        String getSshUserName() {
-            return sshUserName;
-        }
-
-        void setSshUserName(String _sshUserName) {
-            sshUserName = _sshUserName;
-        }
-
-        String getSshUserPassword() {
-            return sshUserPassword;
-        }
-
-        void setSshUserPassword(String _sshUserPassword) {
-            sshUserPassword = _sshUserPassword;
-        }
-
-        List<SshForwardTarget> getForwardTargets() {
-            return forwardTargets;
-        }
-
-        void setForwardTargets(List<SshForwardTarget> _forwardTargets) {
-            forwardTargets = _forwardTargets;
-        }
-
-        boolean isWaitForForwarders() {
-            return waitForForwarders;
-        }
-
-        void setWaitForForwarders(boolean _waitForForwarders) {
-            waitForForwarders = _waitForForwarders;
-        }
-
-    }
-
-    record SshForwardTarget(String targetHost, int targetPort, String localListenAddress, int localPort) {}
 }
