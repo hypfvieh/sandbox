@@ -2,7 +2,6 @@ package com.github.hypfvieh.sandbox.ssh.jsch;
 
 import com.github.hypfvieh.sandbox.ssh.SshForwardTarget;
 import com.github.hypfvieh.sandbox.ssh.SshTunnelConfig;
-import com.github.hypfvieh.sandbox.ssh.sshj.SshjTunnel;
 
 import com.jcraft.jsch.JSchException;
 
@@ -112,7 +111,7 @@ public class JschTunnelBuilder {
      * Add a forwarding target by hostname/IP and target port.<br>
      * You can use this multiple times to add as much as you want.<br>
      * The local listen port will be determined dynamically and can be queried using<br>
-     * {@link SshjTunnel#getLocalListenPorts()}.<br>
+     * {@link JschTunnel#getLocalListenPorts()}.<br>
      * All forwarding connections added by this method will use localhost as local listening address.<br>
      * <br>
      * The map contains local ports for all forwarding connections where the key is created using:<br>
